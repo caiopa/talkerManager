@@ -26,6 +26,17 @@ app.get('/talker', async (_req, res) => {
 app.get('/talker/:id', talkerId, async (__req, __res) => {
 });
 
+// requisito 3 Crie o endpoint POST /login -----------------
+app.post('/login', (req, res) => {
+  const { email, password } = req.params;
+  const token = Math.random().toFixed(16).toString(16).substring(2);
+  if (!email && !password) {
+    res.status(200).json({
+      token,
+    });
+  }
+});
+
 app.listen(PORT, () => {
   console.log('Online');
 });
