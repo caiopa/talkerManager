@@ -3,6 +3,8 @@ const bodyParser = require('body-parser');
 // const { json } = require('body-parser');
 const readJson = require('./readJson');
 const { talkerId } = require('./middleware/talkerById');
+const validationEmail = require('./middleware/validationEmail');
+const validationPassword = require('./middleware/validationPassword');
 
 const app = express();
 app.use(bodyParser.json());
@@ -27,9 +29,9 @@ app.get('/talker/:id', talkerId, async (__req, __res) => {
 });
 
 // requisito 3 Crie o endpoint POST /login -----------------
-app.post('/login', (req, res) => {
+app.post('/login', validationEmail, validationPassword, (req, res) => {
   const { email, password } = req.params;
-  const token = Math.random().toFixed(16).toString(16).substring(2);
+  const token = Math.random().toFixed(16).toString(36).substring(2);
   if (!email && !password) {
     res.status(200).json({
       token,
