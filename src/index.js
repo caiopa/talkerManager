@@ -23,14 +23,7 @@ app.get('/talker', async (_req, res) => {
 });
 // requisito 2 Crie o endpoint GET /talker/:id ----------------------
 
-app.get('/talker/:id', talkerId, async (req, res) => {
-/*  const id = Number(req.params.id);
- const talkers = await readJson.readJson();
- const talker = talkers.find((t) => t.id === id);
- if (!talkers) {
-   return res.status(200).json(talker);
- } 
-  res.status(404).json({ message: 'Pessoa palestrante não encontrada' }); */
+app.get('/talker/:id', talkerId, async (__req, __res) => {
 });
 
 app.listen(PORT, () => {
