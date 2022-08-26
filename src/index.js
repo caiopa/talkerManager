@@ -1,6 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const talkers = require('./talker.json');
+const readJson = require('./readJson');
 
 const app = express();
 app.use(bodyParser.json());
@@ -15,13 +15,9 @@ app.get('/', (_request, response) => {
 
 // requisito 1  Crie o endpoint GET /talker
 
-app.get('/talker', (_req, res) => {
-  if (talkers) {
-    console.log(talkers);
+app.get('/talker', async (_req, res) => {
+   const talkers = await readJson.readJson();
     return res.status(200).json(talkers);
-  } if (talkers.length === 0) {
-    return res.status(200).json([]);
-  }
 });
 
 app.listen(PORT, () => {
