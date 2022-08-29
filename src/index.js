@@ -1,13 +1,18 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-// const { json } = require('body-parser');
-const readJson = require('./readJson');
+const fs = require('fs').promises;
+const { readJson } = require('./readJson');
 const { talkerId } = require('./middleware/talkerById');
 const validationEmail = require('./middleware/validationEmail');
 const validationPassword = require('./middleware/validationPassword');
+const validationToken = require('./middleware/validationToken');
+const validationName = require('./middleware/validationName');
+const validationTalk = require('./middleware/validationTalk');
+const validationDate = require('./middleware/validationDate');
 
 const app = express();
 app.use(bodyParser.json());
+app.use(express.json());
 
 const HTTP_OK_STATUS = 200;
 const PORT = '3000';
@@ -37,6 +42,18 @@ app.post('/login', validationEmail, validationPassword, (req, res) => {
       token,
     });
   }
+});
+
+// requisito 5 Crie o endpoint POST /talker--------------------
+app.post('/talker', 
+validationToken, validationName, validationTalk, validationDate, async (req, res) => {
+  const talker = req.body;
+  const talkers = await readJson();
+  const novoTalkers = { id: talkers[talkers.length - 1].id + 1, ...talker };
+
+  talkers.push(novoTalkers);
+  await fs.writeFile('src/talker.json', JSON.stringify(talkers));
+  return res.status(201).json(novoTalkers);
 });
 
 app.listen(PORT, () => {
