@@ -1,7 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const fs = require('fs').promises;
-const { readJson } = require('./readJson');
+const { readJson, changeTalker } = require('./readJson');
 const { talkerId } = require('./middleware/talkerById');
 const validationEmail = require('./middleware/validationEmail');
 const validationPassword = require('./middleware/validationPassword');
@@ -25,7 +25,7 @@ app.get('/', (_request, response) => {
 // requisito 1  Crie o endpoint GET /talker -----------------
 
 app.get('/talker', async (_req, res) => {
-   const talkers = await readJson.readJson();
+   const talkers = await readJson();
     return res.status(200).json(talkers);
 });
 // requisito 2 Crie o endpoint GET /talker/:id ----------------------
@@ -55,6 +55,20 @@ validationToken, validationName, validationTalk, validationDate, async (req, res
   await fs.writeFile('src/talker.json', JSON.stringify(talkers));
   return res.status(201).json(novoTalkers);
 });
+
+// requisito 6 Crie o endpoint PUT /talker/:id ------------------
+
+app.put('/talker/:id', 
+validationToken, 
+validationName, 
+validationTalk, 
+validationDate, async (req, res) => {
+  const { id } = req.params;
+  const talker = req.body;
+  const updateTalker = await changeTalker(id, talker);
+
+  return res.status(200).json(updateTalker);
+  });
 
 app.listen(PORT, () => {
   console.log('Online');

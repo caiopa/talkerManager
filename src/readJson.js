@@ -14,6 +14,29 @@ async function readJson() {
     }
 }
 
+const writeTalkerFile = async (file) => {
+    await fs.writeFile(join(__dirname, pathFile), JSON.stringify(file));
+  };
+async function changeTalker(id, talkers) {
+    const arrayTalker = await readJson();
+ 
+    let resposta; 
+
+  for (let i = 0; i < arrayTalker.length; i += 1) {
+    if (arrayTalker[i].id === Number(id)) {
+        arrayTalker[i].name = talkers.name;
+        arrayTalker[i].age = talkers.age;
+        arrayTalker[i].talk.watchedAt = talkers.talk.watchedAt;
+        arrayTalker[i].talk.rate = talkers.talk.rate;
+
+        resposta = arrayTalker[i];
+    }
+} 
+await writeTalkerFile(arrayTalker);
+return resposta;
+}
+
 module.exports = {
     readJson,
+    changeTalker,
 };
