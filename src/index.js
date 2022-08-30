@@ -1,7 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const fs = require('fs').promises;
-const { readJson, changeTalker } = require('./readJson');
+const { readJson, changeTalker, deleteTalker } = require('./readJson');
 const { talkerId } = require('./middleware/talkerById');
 const validationEmail = require('./middleware/validationEmail');
 const validationPassword = require('./middleware/validationPassword');
@@ -69,6 +69,15 @@ validationDate, async (req, res) => {
 
   return res.status(200).json(updateTalker);
   });
+
+// requisito 7 Crie o endpoint PUT /talker/:id ----------
+
+app.delete('/talker/:id', validationToken, async (req, res) => {
+  const { id } = req.params;
+  // console.log(id);
+  await deleteTalker(Number(id));
+  return res.send(204).end();
+});
 
 app.listen(PORT, () => {
   console.log('Online');

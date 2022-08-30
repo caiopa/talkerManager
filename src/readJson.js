@@ -36,7 +36,15 @@ await writeTalkerFile(arrayTalker);
 return resposta;
 }
 
+async function deleteTalker(id) {
+    const talkers = await readJson();
+
+    const talkerToDelete = talkers.filter((t) => t.id !== id);
+   await writeTalkerFile(talkerToDelete);
+}
+
 module.exports = {
     readJson,
     changeTalker,
+    deleteTalker,
 };
